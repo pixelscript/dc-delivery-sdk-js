@@ -5,7 +5,7 @@ import { walkAndReplace } from '../../utils/JsonWalker';
 import { ContentItem } from '../model/ContentItem';
 import { ContentBody } from '../model/ContentBody';
 import { ContentMapper } from '../mapper/ContentMapper';
-
+import { connection } from '../../connection/Connection';
 /**
  * @hidden
  */
@@ -32,6 +32,9 @@ export class GetContentItem {
   ) {}
 
   getContentItem<T extends ContentBody>(id: string): Promise<ContentItem<T>> {
+    if(this.config.connect) {
+      return connection.client.request('content-item', id, {timeout: false});
+    }
     const url = this.getUrl({
       'sys.iri': `http://content.cms.amplience.com/${id}`
     });

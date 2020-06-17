@@ -63,7 +63,8 @@
     "node": ">=8.9"
   },
   "dependencies": {
-    "axios": "^0.18.0"
+    "axios": "^0.18.0",
+    "message-event-channel": "^1.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",

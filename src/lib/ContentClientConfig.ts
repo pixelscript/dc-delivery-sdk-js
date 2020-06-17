@@ -45,4 +45,6 @@ export interface ContentClientConfig {
    * update the baseUrl to load content from the virtual staging environment.
    */
   baseUrl?: string;
+
+  connect?: boolean;
 }
