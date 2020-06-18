@@ -33,7 +33,12 @@ export class GetContentItem {
 
   getContentItem<T extends ContentBody>(id: string): Promise<ContentItem<T>> {
     if(this.config.connect) {
-      return connection.client.request('content-item', {id, config: this.config} , {timeout: false});
+      return connection.client.request('content-item', {id, config: this.config} , {timeout: false})
+      .then(json => {
+        const contentItem = new ContentItem<T>();
+        contentItem.body = json;
+        return contentItem;
+      })
     }
     const url = this.getUrl({
       'sys.iri': `http://content.cms.amplience.com/${id}`
