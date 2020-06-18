@@ -86,6 +86,7 @@ export class ContentClient {
   subscribe(method: Function): void {
     if(this.config.connect) {
       connection.client.on('change', method);
+      connection.client.request('current').then(body => method(body));
     }
   }
 
