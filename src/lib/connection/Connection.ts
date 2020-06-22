@@ -12,4 +12,4 @@ const connection = new Connection();
 export {
   connection,
   ClientConnection
-}
+};

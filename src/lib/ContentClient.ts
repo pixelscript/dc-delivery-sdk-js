@@ -6,7 +6,6 @@ import { ContentItem } from './content/model/ContentItem';
 import { ContentBody, DefaultContentBody } from './content/model/ContentBody';
 import { GetContentItem } from './content/coordinators/GetContentItem';
 import { ContentMapper } from './content/mapper/ContentMapper';
-import { connection } from './connection/Connection';
 /**
  * Amplience [Content Delivery API](https://docs.amplience.net/integration/deliveryapi.html?h=delivery) client.
  *
@@ -42,7 +41,7 @@ export class ContentClient {
         'Parameter "config" must contain a valid "account" name'
       );
     }
-    
+
     if (
       config.stagingEnvironment &&
       config.stagingEnvironment.indexOf('://') !== -1
@@ -83,8 +82,9 @@ export class ContentClient {
     ).getContentItem(contentItemId);
   }
 
-  subscribe(method: Function): void {
-    if(this.config.connect) {
+  async subscribe(method: Function): Promise<void> {
+    const { connection } = await import('./connection/Connection');
+    if (this.config.connect) {
       connection.client.on('change', method);
       connection.client.request('current').then(body => method(body));
     }

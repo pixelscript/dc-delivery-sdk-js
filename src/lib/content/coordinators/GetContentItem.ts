@@ -5,7 +5,6 @@ import { walkAndReplace } from '../../utils/JsonWalker';
 import { ContentItem } from '../model/ContentItem';
 import { ContentBody } from '../model/ContentBody';
 import { ContentMapper } from '../mapper/ContentMapper';
-import { connection } from '../../connection/Connection';
 /**
  * @hidden
  */
@@ -31,14 +30,16 @@ export class GetContentItem {
     private readonly mapper: ContentMapper
   ) {}
 
-  getContentItem<T extends ContentBody>(id: string): Promise<ContentItem<T>> {
-    if(this.config.connect) {
+  async getContentItem<T extends ContentBody>(id: string): Promise<ContentItem<T>> {
+
+    if (this.config.connect) {
+      const { connection } = await import('../../connection/Connection');
       return connection.client.request('content-item', {id, config: this.config} , {timeout: false})
       .then(json => {
         const contentItem = new ContentItem<T>();
         contentItem.body = json;
         return contentItem;
-      })
+      });
     }
     const url = this.getUrl({
       'sys.iri': `http://content.cms.amplience.com/${id}`
